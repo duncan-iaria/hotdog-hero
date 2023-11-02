@@ -7,9 +7,27 @@
 size = Vector2(231, 61)
 
 [node name="Cart" type="Node2D"]
+y_sort_enabled = true
+
+[node name="Hotdog2" type="Node2D" parent="."]
+y_sort_enabled = true
+position = Vector2(617, 287)
+metadata/_edit_group_ = true
+
+[node name="Art" type="Sprite2D" parent="Hotdog2"]
+self_modulate = Color(1, 0.219608, 1, 1)
+texture = ExtResource("1_h4u3a")
+
+[node name="Draggable" type="Area2D" parent="Hotdog2"]
+script = ExtResource("2_6qeuo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hotdog2/Draggable"]
+position = Vector2(-1.5, 1.5)
+shape = SubResource("RectangleShape2D_82pgn")
 
 [node name="Hotdog" type="Node2D" parent="."]
-position = Vector2(257, 129)
+y_sort_enabled = true
+position = Vector2(360, 158)
 metadata/_edit_group_ = true
 
 [node name="Art" type="Sprite2D" parent="Hotdog"]
@@ -22,4 +40,5 @@ script = ExtResource("2_6qeuo")
 position = Vector2(-1.5, 1.5)
 shape = SubResource("RectangleShape2D_82pgn")
 
+[connection signal="input_event" from="Hotdog2/Draggable" to="Hotdog2/Draggable" method="_on_input_event"]
 [connection signal="input_event" from="Hotdog/Draggable" to="Hotdog/Draggable" method="_on_input_event"]
