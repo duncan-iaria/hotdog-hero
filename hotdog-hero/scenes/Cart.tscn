@@ -1,0 +1,25 @@
+[gd_scene load_steps=4 format=3 uid="uid://dcf8dl4oa1sgj"]
+
+[ext_resource type="Texture2D" uid="uid://ijlp0e6kfidu" path="res://assets/hotdog_01.png" id="1_h4u3a"]
+[ext_resource type="Script" path="res://scripts/draggable.gd" id="2_6qeuo"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_82pgn"]
+size = Vector2(231, 61)
+
+[node name="Cart" type="Node2D"]
+
+[node name="Hotdog" type="Node2D" parent="."]
+position = Vector2(257, 129)
+metadata/_edit_group_ = true
+
+[node name="Art" type="Sprite2D" parent="Hotdog"]
+texture = ExtResource("1_h4u3a")
+
+[node name="Draggable" type="Area2D" parent="Hotdog"]
+script = ExtResource("2_6qeuo")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hotdog/Draggable"]
+position = Vector2(-1.5, 1.5)
+shape = SubResource("RectangleShape2D_82pgn")
+
+[connection signal="input_event" from="Hotdog/Draggable" to="Hotdog/Draggable" method="_on_input_event"]
