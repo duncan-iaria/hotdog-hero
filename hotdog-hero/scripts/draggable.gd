@@ -12,12 +12,12 @@ func _ready():
 	_parent = self.get_parent();
 	
 
-func _process(delta):
+func _process(_delta):
 	if _is_dragging && _parent != null:
 		_parent.position = _current_viewport.get_mouse_position() - _cursor_offset;
 	
 
-func _on_input_event(viewport: Viewport, event: InputEvent, shape_idx: int):
+func _on_input_event(viewport: Viewport, event: InputEvent, _shape_idx: int):
 	if event.is_action_pressed("left_click"):
 		_current_viewport = viewport;
 		_is_dragging = !_is_dragging;

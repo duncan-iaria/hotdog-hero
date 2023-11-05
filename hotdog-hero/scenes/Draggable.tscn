@@ -1,0 +1,15 @@
+[gd_scene load_steps=3 format=3 uid="uid://cjcc70l6uh7q8"]
+
+[ext_resource type="Script" path="res://scripts/draggable.gd" id="1_wl00q"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_82pgn"]
+size = Vector2(231, 61)
+
+[node name="Draggable" type="Area2D"]
+script = ExtResource("1_wl00q")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1.5, 1.5)
+shape = SubResource("RectangleShape2D_82pgn")
+
+[connection signal="input_event" from="." to="." method="_on_input_event"]
