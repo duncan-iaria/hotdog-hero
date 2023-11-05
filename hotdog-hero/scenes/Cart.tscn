@@ -17,27 +17,26 @@ size = Vector2(199, 20)
 [node name="Cart" type="Node2D"]
 y_sort_enabled = true
 
-[node name="Hotdog" type="Node2D" parent="." node_paths=PackedStringArray("DRAGGABLE_NODE")]
+[node name="Hotdog" type="RigidBody2D" parent="." node_paths=PackedStringArray("DRAGGABLE_NODE")]
 y_sort_enabled = true
-position = Vector2(360, 158)
+position = Vector2(622, 119)
+gravity_scale = 0.0
 script = ExtResource("3_gshhp")
 id = "hotdog"
 display_name = "Hot Dog"
 ingredient_type = 1
 DRAGGABLE_NODE = NodePath("Draggable")
+metadata/_edit_group_ = true
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hotdog"]
+position = Vector2(-4.5, 11.5)
+shape = SubResource("RectangleShape2D_5hkf1")
+debug_color = Color(0.941176, 0, 0.603922, 0.419608)
 
 [node name="Art" type="Sprite2D" parent="Hotdog"]
 texture = ExtResource("1_h4u3a")
 
 [node name="Draggable" parent="Hotdog" instance=ExtResource("3_yqamu")]
-
-[node name="RigidBody2D" type="RigidBody2D" parent="Hotdog"]
-contact_monitor = true
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hotdog/RigidBody2D"]
-position = Vector2(-4.5, 11.5)
-shape = SubResource("RectangleShape2D_5hkf1")
-debug_color = Color(0.941176, 0, 0.603922, 0.419608)
 
 [node name="Bun" type="Node2D" parent="."]
 position = Vector2(522, 383)
@@ -61,4 +60,5 @@ shape = SubResource("RectangleShape2D_q37aq")
 
 [node name="Draggable" parent="Bun" instance=ExtResource("3_yqamu")]
 
+[connection signal="ingredient_attached" from="Bun/IngredientDropZone" to="Bun" method="on_ingredient_attached"]
 [connection signal="body_entered" from="Bun/IngredientDropZone/Area2D" to="Bun/IngredientDropZone" method="_on_body_entered"]

@@ -1,8 +1,10 @@
 class_name IngredientDropZone extends Node2D
 
+signal ingredient_attached(ingredient: Ingredient);
+
 func _on_body_entered(body: Node2D):
-	if body.get_parent() is Ingredient:
+	if body is Ingredient && !body.is_attached:
 		print("hotdog attached");
-		body.get_parent().on_attached();
+		ingredient_attached.emit(body);
 	else: 
 		print("not hotdog", body);
