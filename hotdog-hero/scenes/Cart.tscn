@@ -39,19 +39,23 @@ texture = ExtResource("1_h4u3a")
 
 [node name="Draggable" parent="Hotdog" instance=ExtResource("3_yqamu")]
 
-[node name="Bun" type="Node2D" parent="."]
+[node name="Bun" type="Node2D" parent="." node_paths=PackedStringArray("HOTDOG_SLOT")]
 position = Vector2(522, 383)
 script = ExtResource("4_x4iwu")
+HOTDOG_SLOT = NodePath("Hotdog_Slot")
 metadata/_edit_group_ = true
-
-[node name="BunFront" type="Sprite2D" parent="Bun"]
-texture = ExtResource("3_v3uhh")
 
 [node name="BunRear" type="Sprite2D" parent="Bun"]
 texture = ExtResource("4_qjhum")
 
+[node name="Hotdog_Slot" type="Node2D" parent="Bun"]
+
+[node name="BunFront" type="Sprite2D" parent="Bun"]
+texture = ExtResource("3_v3uhh")
+
 [node name="IngredientDropZone" type="Node2D" parent="Bun"]
 script = ExtResource("7_t8qrs")
+is_click_required = true
 
 [node name="Area2D" type="Area2D" parent="Bun/IngredientDropZone"]
 
