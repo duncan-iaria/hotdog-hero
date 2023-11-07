@@ -8,6 +8,7 @@ signal ingredient_attached(ingredient: Ingredient);
 
 func _on_body_entered(body: Node2D):
 	if body is Ingredient && !body.is_attached:
+		print("drop zone entered");
 		if is_click_required: 
 			_current_ingredient = body;
 		else:
@@ -24,5 +25,6 @@ func _on_body_exited(body: Node2D):
 
 func _on_input_event(viewport: Viewport, event: InputEvent, _shape_idx: int):
 	if event.is_action_pressed("left_click"):
+		print("drop zone clicked in");
 		if _current_ingredient != null && !_current_ingredient.is_attached:
 			ingredient_attached.emit(_current_ingredient);

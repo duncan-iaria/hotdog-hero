@@ -1,4 +1,4 @@
-[gd_scene load_steps=11 format=3 uid="uid://dcf8dl4oa1sgj"]
+[gd_scene load_steps=12 format=3 uid="uid://dcf8dl4oa1sgj"]
 
 [ext_resource type="Texture2D" uid="uid://ijlp0e6kfidu" path="res://assets/hotdog_01.png" id="1_h4u3a"]
 [ext_resource type="Script" path="res://scripts/ingredient.gd" id="3_gshhp"]
@@ -12,13 +12,15 @@
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_5hkf1"]
 size = Vector2(205, 25)
 
+[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_14hwt"]
+
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_q37aq"]
 size = Vector2(199, 20)
 
 [node name="Cart" type="Node2D"]
 y_sort_enabled = true
 
-[node name="Hotdog" type="RigidBody2D" parent="." node_paths=PackedStringArray("DRAGGABLE_NODE")]
+[node name="Hotdog" type="RigidBody2D" parent="." node_paths=PackedStringArray("DRAGGABLE_NODE", "RAYCASTER")]
 y_sort_enabled = true
 position = Vector2(622, 119)
 gravity_scale = 0.0
@@ -27,6 +29,7 @@ id = "hotdog"
 display_name = "Hot Dog"
 ingredient_type = 1
 DRAGGABLE_NODE = NodePath("Draggable")
+RAYCASTER = NodePath("ShapeCast2D")
 metadata/_edit_group_ = true
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hotdog"]
@@ -38,6 +41,15 @@ debug_color = Color(0.941176, 0, 0.603922, 0.419608)
 texture = ExtResource("1_h4u3a")
 
 [node name="Draggable" parent="Hotdog" instance=ExtResource("3_yqamu")]
+
+[node name="ShapeCast2D" type="ShapeCast2D" parent="Hotdog"]
+position = Vector2(75, 0)
+rotation = 1.5708
+shape = SubResource("CapsuleShape2D_14hwt")
+target_position = Vector2(0, 150)
+max_results = 12
+collide_with_areas = true
+collide_with_bodies = false
 
 [node name="Bun" type="Node2D" parent="." node_paths=PackedStringArray("HOTDOG_SLOT")]
 position = Vector2(522, 383)
@@ -62,6 +74,7 @@ is_click_required = true
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Bun/IngredientDropZone/Area2D"]
 position = Vector2(2.5, 11)
 shape = SubResource("RectangleShape2D_q37aq")
+debug_color = Color(0, 0.631373, 0, 0.772549)
 
 [node name="Draggable" parent="Bun" instance=ExtResource("3_yqamu")]
 
@@ -70,5 +83,6 @@ position = Vector2(281, 240)
 scale = Vector2(0.5, 0.5)
 texture = ExtResource("8_oy3ux")
 
+[connection signal="drag_ended" from="Hotdog/Draggable" to="Hotdog" method="on_drag_end"]
 [connection signal="ingredient_attached" from="Bun/IngredientDropZone" to="Bun" method="on_ingredient_attached"]
 [connection signal="body_entered" from="Bun/IngredientDropZone/Area2D" to="Bun/IngredientDropZone" method="_on_body_entered"]

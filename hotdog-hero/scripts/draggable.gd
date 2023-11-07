@@ -20,14 +20,26 @@ func _process(_delta):
 func _on_input_event(viewport: Viewport, event: InputEvent, _shape_idx: int):
 	if event.is_action_pressed("left_click"):
 		_current_viewport = viewport;
-		_is_dragging = !_is_dragging;
 		
-		if _is_dragging:
-			_cursor_offset = viewport.get_mouse_position() - self.global_position;
-			drag_began.emit();
+		if Game.current_draggable == self:
+			_toggle_drag_state(viewport);
+		elif Game.current_draggable == null:
+			_toggle_drag_state(viewport);
 		else:
-			drag_ended.emit();
+			print("not current draggable");	
+			return;
 	
+	
+func _toggle_drag_state(viewport: Viewport):
+	_is_dragging = !_is_dragging;
+	
+	if _is_dragging:
+		_cursor_offset = viewport.get_mouse_position() - self.global_position;
+		Game.set_current_draggable(self);
+		drag_began.emit();
+	else:
+		Game.clear_current_draggable();
+		drag_ended.emit();
 
 
 func _on_drag_began():
