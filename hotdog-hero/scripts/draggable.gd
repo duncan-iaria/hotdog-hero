@@ -10,6 +10,7 @@ var _cursor_offset: Vector2 = Vector2.ZERO;
 
 func _ready():
 	_parent = self.get_parent();
+	_current_viewport = get_viewport();
 	
 
 func _process(_delta):
@@ -17,30 +18,40 @@ func _process(_delta):
 		_parent.position = _current_viewport.get_mouse_position() - _cursor_offset;
 	
 
-func _on_input_event(viewport: Viewport, event: InputEvent, _shape_idx: int):
+func _on_input_event(viewport: Viewport, event: InputEvent, _shape_idx: int):	
 	if event.is_action_pressed("left_click"):
-		_current_viewport = viewport;
+		print(_parent);
+		viewport.set_input_as_handled();
 		
-		if Game.current_draggable == self:
-			_toggle_drag_state(viewport);
-		elif Game.current_draggable == null:
-			_toggle_drag_state(viewport);
-		else:
-			print("not current draggable");	
+		if Game.current_draggable != null && Game.current_draggable != self:
+			print("not current draggable");
 			return;
-	
-	
-func _toggle_drag_state(viewport: Viewport):
-	_is_dragging = !_is_dragging;
-	
-	if _is_dragging:
-		_cursor_offset = viewport.get_mouse_position() - self.global_position;
-		Game.set_current_draggable(self);
-		drag_began.emit();
-	else:
-		Game.clear_current_draggable();
-		drag_ended.emit();
+		
+		_current_viewport = viewport;
+		_is_dragging = !_is_dragging;
+		
+		if _is_dragging:
+			_cursor_offset = viewport.get_mouse_position() - self.global_position;
+			_parent.z_index = 99;
+			drag_began.emit();
+			Game.set_current_draggable(self);
+		else:
+			drag_ended.emit();
+			_parent.z_index = 0;
+			Game.set_current_draggable(null);
 
 
-func _on_drag_began():
-	pass # Replace with function body.
+func _on_texture_button_pressed():
+		if Game.current_draggable != null && Game.current_draggable != self:
+			print("not current draggable");
+			return;
+		
+		_is_dragging = !_is_dragging;
+		
+		if _is_dragging:
+			_cursor_offset = _current_viewport.get_mouse_position() - self.global_position;
+			drag_began.emit();
+			Game.set_current_draggable(self);
+		else:
+			drag_ended.emit();
+			Game.set_current_draggable(null);
