@@ -51,6 +51,7 @@ func _on_texture_button_pressed():
 		if _is_dragging:
 			_cursor_offset = _current_viewport.get_mouse_position() - self.global_position;
 			drag_began.emit();
+			_parent.move_to_front();
 			Game.set_current_draggable(self);
 		else:
 			drag_ended.emit();

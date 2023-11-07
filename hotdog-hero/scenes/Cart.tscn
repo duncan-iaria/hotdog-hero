@@ -29,9 +29,9 @@ shape = SubResource("RectangleShape2D_mdfxp")
 [node name="TextureButton" type="TextureButton" parent="Hotdog/Draggable"]
 y_sort_enabled = true
 offset_left = -115.0
-offset_top = -33.0
+offset_top = -22.0
 offset_right = 109.0
-offset_bottom = 40.0
+offset_bottom = 28.0
 
 [node name="Hotdog2" type="Node2D" parent="."]
 y_sort_enabled = true
@@ -54,9 +54,9 @@ shape = SubResource("RectangleShape2D_mdfxp")
 [node name="TextureButton" type="TextureButton" parent="Hotdog2/Draggable"]
 y_sort_enabled = true
 offset_left = -113.0
-offset_top = -37.0
+offset_top = -19.0
 offset_right = 107.0
-offset_bottom = 40.0
+offset_bottom = 25.0
 
 [connection signal="input_event" from="Hotdog/Draggable" to="Hotdog/Draggable" method="_on_input_event"]
 [connection signal="pressed" from="Hotdog/Draggable/TextureButton" to="Hotdog/Draggable" method="_on_texture_button_pressed"]
