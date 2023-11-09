@@ -55,4 +55,21 @@ func _on_texture_button_pressed():
 			Game.set_current_draggable(self);
 		else:
 			drag_ended.emit();
+			check_for_surface_collision();
 			Game.set_current_draggable(null);
+
+
+func check_for_surface_collision():
+	var space_state = get_world_2d().direct_space_state;
+	var query = PhysicsRayQueryParameters2D.create(self.position, self.position + Vector2(0, 125), collision_mask, [self]);
+	query.collide_with_areas = true;
+#	query.hit_from_inside = true;
+	
+	print(collision_mask);
+	
+	var result = space_state.intersect_ray(query);
+	print(result);
+	
+
+func _draw():
+	draw_line(self.position, self.position + Vector2(0, 125), Color.DODGER_BLUE);
