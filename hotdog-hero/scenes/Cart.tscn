@@ -1,10 +1,14 @@
-[gd_scene load_steps=5 format=3 uid="uid://dcf8dl4oa1sgj"]
+[gd_scene load_steps=7 format=3 uid="uid://dcf8dl4oa1sgj"]
 
+[ext_resource type="Script" path="res://scripts/ingredient.gd" id="1_acsn7"]
 [ext_resource type="Texture2D" uid="uid://ijlp0e6kfidu" path="res://assets/hotdog_01.png" id="1_h4u3a"]
 [ext_resource type="Script" path="res://scripts/draggable.gd" id="1_hntoo"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_afjpd"]
 size = Vector2(1185, 248)
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w4udu"]
+size = Vector2(228, 30)
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_mdfxp"]
 size = Vector2(222, 60)
@@ -30,20 +34,32 @@ offset_right = 602.0
 offset_bottom = 230.0
 color = Color(0.513726, 0.513726, 0.513726, 1)
 
-[node name="Hotdog" type="Node2D" parent="."]
+[node name="Hotdog" type="RigidBody2D" parent="." node_paths=PackedStringArray("ground_check_raycaster")]
 y_sort_enabled = true
-position = Vector2(310, 71)
+position = Vector2(325, 172)
+gravity_scale = 0.0
+script = ExtResource("1_acsn7")
+ground_check_raycaster = NodePath("RayCast2D")
+ground_check_length = 2000.0
 metadata/_edit_group_ = true
+
+[node name="RayCast2D" type="RayCast2D" parent="Hotdog"]
+target_position = Vector2(0, 2000)
+collision_mask = 2
+hit_from_inside = true
+collide_with_areas = true
+collide_with_bodies = false
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hotdog"]
+position = Vector2(-1, 5)
+shape = SubResource("RectangleShape2D_w4udu")
 
 [node name="Sprite2D" type="Sprite2D" parent="Hotdog"]
 texture = ExtResource("1_h4u3a")
 metadata/_edit_group_ = true
 
-[node name="Draggable" type="Area2D" parent="Hotdog" node_paths=PackedStringArray("raycaster")]
-collision_layer = 3
-collision_mask = 3
+[node name="Draggable" type="Area2D" parent="Hotdog"]
 script = ExtResource("1_hntoo")
-raycaster = NodePath("RayCast2D")
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="Hotdog/Draggable"]
 visible = false
@@ -57,48 +73,6 @@ offset_top = -22.0
 offset_right = 109.0
 offset_bottom = 28.0
 
-[node name="RayCast2D" type="RayCast2D" parent="Hotdog/Draggable"]
-target_position = Vector2(0, 100)
-collision_mask = 2
-hit_from_inside = true
-collide_with_areas = true
-collide_with_bodies = false
-
-[node name="Hotdog2" type="Node2D" parent="."]
-y_sort_enabled = true
-position = Vector2(652, 191)
-metadata/_edit_group_ = true
-
-[node name="Sprite2D" type="Sprite2D" parent="Hotdog2"]
-self_modulate = Color(0.486275, 0.717647, 0, 1)
-texture = ExtResource("1_h4u3a")
-metadata/_edit_group_ = true
-
-[node name="Draggable" type="Area2D" parent="Hotdog2" node_paths=PackedStringArray("raycaster")]
-collision_layer = 3
-script = ExtResource("1_hntoo")
-raycaster = NodePath("RayCast2D")
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hotdog2/Draggable"]
-visible = false
-position = Vector2(-2, 4)
-shape = SubResource("RectangleShape2D_mdfxp")
-
-[node name="TextureButton" type="TextureButton" parent="Hotdog2/Draggable"]
-y_sort_enabled = true
-offset_left = -113.0
-offset_top = -19.0
-offset_right = 107.0
-offset_bottom = 25.0
-
-[node name="RayCast2D" type="RayCast2D" parent="Hotdog2/Draggable"]
-target_position = Vector2(0, 100)
-collision_mask = 2
-hit_from_inside = true
-collide_with_areas = true
-collide_with_bodies = false
-
+[connection signal="drag_ended" from="Hotdog/Draggable" to="Hotdog" method="on_drag_end"]
 [connection signal="input_event" from="Hotdog/Draggable" to="Hotdog/Draggable" method="_on_input_event"]
 [connection signal="pressed" from="Hotdog/Draggable/TextureButton" to="Hotdog/Draggable" method="_on_texture_button_pressed"]
-[connection signal="input_event" from="Hotdog2/Draggable" to="Hotdog2/Draggable" method="_on_input_event"]
-[connection signal="pressed" from="Hotdog2/Draggable/TextureButton" to="Hotdog2/Draggable" method="_on_texture_button_pressed"]

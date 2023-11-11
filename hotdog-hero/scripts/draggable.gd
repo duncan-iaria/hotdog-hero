@@ -3,18 +3,15 @@ class_name Draggable extends Area2D
 signal drag_began;
 signal drag_ended;
 
-@export var raycaster: RayCast2D;
-@export var ground_check_length: float = 125;
-
 var _is_dragging = false;
 var _parent: Node2D = null;
 var _current_viewport: Viewport = null;
 var _cursor_offset: Vector2 = Vector2.ZERO;
 
+
 func _ready():
 	_parent = self.get_parent();
 	_current_viewport = get_viewport();
-	raycaster.set_target_position(Vector2(0, ground_check_length));
 	
 
 func _process(_delta):
@@ -59,33 +56,4 @@ func _on_texture_button_pressed():
 			Game.set_current_draggable(self);
 		else:
 			drag_ended.emit();
-			check_for_surface_collision();
 			Game.set_current_draggable(null);
-
-
-func check_for_surface_collision():
-	raycaster.set_target_position(Vector2(0, ground_check_length));
-	
-	if raycaster.is_colliding():
-		var temp_collider: Area2D = raycaster.get_collider();
-		print(temp_collider);
-		
-		var temp_point = raycaster.get_collision_point();
-		print(temp_point);
-		
-		var temp_diff: Vector2 = global_position - temp_point
-		print(temp_diff);
-		
-#	var space_state = get_world_2d().direct_space_state;
-#	var query = PhysicsRayQueryParameters2D.create(self.position, self.position + Vector2(0, 125), collision_mask, [self]);
-#	query.collide_with_areas = true;
-##	query.hit_from_inside = true;
-#
-#	print(collision_mask);
-#
-#	var result = space_state.intersect_ray(query);
-#	print(result);
-	
-
-func _draw():
-	draw_line(self.position, self.position + Vector2(0, ground_check_length), Color.DODGER_BLUE);
