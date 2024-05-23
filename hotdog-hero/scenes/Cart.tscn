@@ -1,88 +1,78 @@
-[gd_scene load_steps=12 format=3 uid="uid://dcf8dl4oa1sgj"]
+[gd_scene load_steps=7 format=3 uid="uid://dcf8dl4oa1sgj"]
 
+[ext_resource type="Script" path="res://scripts/ingredient.gd" id="1_acsn7"]
 [ext_resource type="Texture2D" uid="uid://ijlp0e6kfidu" path="res://assets/hotdog_01.png" id="1_h4u3a"]
-[ext_resource type="Script" path="res://scripts/ingredient.gd" id="3_gshhp"]
-[ext_resource type="Texture2D" uid="uid://bkcnx372ofcjk" path="res://assets/bun_front_01.png" id="3_v3uhh"]
-[ext_resource type="PackedScene" uid="uid://cjcc70l6uh7q8" path="res://scenes/Draggable.tscn" id="3_yqamu"]
-[ext_resource type="Texture2D" uid="uid://7d2o6sad8iyq" path="res://assets/bun_rear_01.png" id="4_qjhum"]
-[ext_resource type="Script" path="res://scripts/ingredient_container.gd" id="4_x4iwu"]
-[ext_resource type="Script" path="res://scripts/ingredient_drop_zone.gd" id="7_t8qrs"]
-[ext_resource type="Texture2D" uid="uid://b55pttk68s0qe" path="res://assets/spaceman_sprite_01.png" id="8_oy3ux"]
+[ext_resource type="Script" path="res://scripts/draggable.gd" id="1_hntoo"]
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_5hkf1"]
-size = Vector2(205, 25)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_afjpd"]
+size = Vector2(1185, 248)
 
-[sub_resource type="CapsuleShape2D" id="CapsuleShape2D_14hwt"]
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_w4udu"]
+size = Vector2(228, 30)
 
-[sub_resource type="RectangleShape2D" id="RectangleShape2D_q37aq"]
-size = Vector2(199, 20)
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_mdfxp"]
+size = Vector2(222, 60)
 
 [node name="Cart" type="Node2D"]
 y_sort_enabled = true
 
-[node name="Hotdog" type="RigidBody2D" parent="." node_paths=PackedStringArray("DRAGGABLE_NODE", "RAYCASTER")]
-y_sort_enabled = true
-position = Vector2(622, 119)
-gravity_scale = 0.0
-script = ExtResource("3_gshhp")
-id = "hotdog"
-display_name = "Hot Dog"
-ingredient_type = 1
-DRAGGABLE_NODE = NodePath("Draggable")
-RAYCASTER = NodePath("ShapeCast2D")
+[node name="Surface" type="Node2D" parent="." groups=["surface"]]
+position = Vector2(561, 412)
 metadata/_edit_group_ = true
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Hotdog"]
-position = Vector2(-4.5, 11.5)
-shape = SubResource("RectangleShape2D_5hkf1")
-debug_color = Color(0.941176, 0, 0.603922, 0.419608)
+[node name="Area2D" type="Area2D" parent="Surface"]
+collision_layer = 2
+collision_mask = 2
 
-[node name="Art" type="Sprite2D" parent="Hotdog"]
-texture = ExtResource("1_h4u3a")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Surface/Area2D"]
+position = Vector2(13.5, 114)
+shape = SubResource("RectangleShape2D_afjpd")
 
-[node name="Draggable" parent="Hotdog" instance=ExtResource("3_yqamu")]
+[node name="ColorRect" type="ColorRect" parent="Surface"]
+offset_left = -566.0
+offset_right = 602.0
+offset_bottom = 230.0
+color = Color(0.513726, 0.513726, 0.513726, 1)
 
-[node name="ShapeCast2D" type="ShapeCast2D" parent="Hotdog"]
-position = Vector2(75, 0)
-rotation = 1.5708
-shape = SubResource("CapsuleShape2D_14hwt")
-target_position = Vector2(0, 150)
-max_results = 12
+[node name="Hotdog" type="RigidBody2D" parent="." node_paths=PackedStringArray("ground_check_raycaster")]
+y_sort_enabled = true
+position = Vector2(325, 172)
+gravity_scale = 0.0
+script = ExtResource("1_acsn7")
+ground_check_raycaster = NodePath("RayCast2D")
+ground_check_length = 2000.0
+metadata/_edit_group_ = true
+
+[node name="RayCast2D" type="RayCast2D" parent="Hotdog"]
+target_position = Vector2(0, 2000)
+collision_mask = 2
+hit_from_inside = true
 collide_with_areas = true
 collide_with_bodies = false
 
-[node name="Bun" type="Node2D" parent="." node_paths=PackedStringArray("HOTDOG_SLOT")]
-position = Vector2(522, 383)
-script = ExtResource("4_x4iwu")
-HOTDOG_SLOT = NodePath("Hotdog_Slot")
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hotdog"]
+position = Vector2(-1, 5)
+shape = SubResource("RectangleShape2D_w4udu")
+
+[node name="Sprite2D" type="Sprite2D" parent="Hotdog"]
+texture = ExtResource("1_h4u3a")
 metadata/_edit_group_ = true
 
-[node name="BunRear" type="Sprite2D" parent="Bun"]
-texture = ExtResource("4_qjhum")
+[node name="Draggable" type="Area2D" parent="Hotdog"]
+script = ExtResource("1_hntoo")
 
-[node name="Hotdog_Slot" type="Node2D" parent="Bun"]
+[node name="CollisionShape2D" type="CollisionShape2D" parent="Hotdog/Draggable"]
+visible = false
+position = Vector2(-2, 4)
+shape = SubResource("RectangleShape2D_mdfxp")
 
-[node name="BunFront" type="Sprite2D" parent="Bun"]
-texture = ExtResource("3_v3uhh")
-
-[node name="IngredientDropZone" type="Node2D" parent="Bun"]
-script = ExtResource("7_t8qrs")
-is_click_required = true
-
-[node name="Area2D" type="Area2D" parent="Bun/IngredientDropZone"]
-
-[node name="CollisionShape2D" type="CollisionShape2D" parent="Bun/IngredientDropZone/Area2D"]
-position = Vector2(2.5, 11)
-shape = SubResource("RectangleShape2D_q37aq")
-debug_color = Color(0, 0.631373, 0, 0.772549)
-
-[node name="Draggable" parent="Bun" instance=ExtResource("3_yqamu")]
-
-[node name="Sprite2D" type="Sprite2D" parent="."]
-position = Vector2(281, 240)
-scale = Vector2(0.5, 0.5)
-texture = ExtResource("8_oy3ux")
+[node name="TextureButton" type="TextureButton" parent="Hotdog/Draggable"]
+y_sort_enabled = true
+offset_left = -115.0
+offset_top = -22.0
+offset_right = 109.0
+offset_bottom = 28.0
 
 [connection signal="drag_ended" from="Hotdog/Draggable" to="Hotdog" method="on_drag_end"]
-[connection signal="ingredient_attached" from="Bun/IngredientDropZone" to="Bun" method="on_ingredient_attached"]
-[connection signal="body_entered" from="Bun/IngredientDropZone/Area2D" to="Bun/IngredientDropZone" method="_on_body_entered"]
+[connection signal="input_event" from="Hotdog/Draggable" to="Hotdog/Draggable" method="_on_input_event"]
+[connection signal="pressed" from="Hotdog/Draggable/TextureButton" to="Hotdog/Draggable" method="_on_texture_button_pressed"]
